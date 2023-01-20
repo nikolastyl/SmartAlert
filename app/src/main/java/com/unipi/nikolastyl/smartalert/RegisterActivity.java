@@ -24,8 +24,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     EditText email,phone,password,confirmPassword;
     Button registerBtn;
-    String phonePattern= "(69)[0-9]{8}";
-    String emailPattern="[a-zA-Z0-9._-]+@[a-z]+\\.[a-z]+";
+    String phonePattern= "(69)[0-9]{8}"; // greek mobile number check
+    String emailPattern="[a-zA-Z0-9._-]+@[a-z]+\\.[a-z]+"; //email pattern for check
     FirebaseAuth mAuth;
     FirebaseDatabase database;
     DatabaseReference dataRef;
@@ -56,10 +56,11 @@ public class RegisterActivity extends AppCompatActivity {
         String password1=password.getText().toString();
         String confirmPassword1=confirmPassword.getText().toString();
         String phone1=phone.getText().toString();
-        final String[] uID = new String[1];
-        HashMap<String,Object>hashMap=new HashMap<>();
+        final String[] uID = new String[1]; // String uID for the unique user's id that firebase give to every user
+        HashMap<String,Object>hashMap=new HashMap<>();//hash map for the realtime database
         hashMap.put("email",email1);
         hashMap.put("phone",phone1);
+        //all the checks
         if(!email1.matches(emailPattern)){
             email.setError("invalid email");
         }else if(!phone1.matches(phonePattern)){
@@ -74,15 +75,15 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            uID[0] =mAuth.getUid();
+                            uID[0] =mAuth.getUid();//get the user's id
                             dataRef.child("Users")
-                                    .child(uID[0])
-                                    .setValue(hashMap)
+                                    .child(uID[0])//set the unique user id for key in database
+                                    .setValue(hashMap)//email and mobile number of user's in database
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task2) {
                                             if(task2.isSuccessful()){
-                                                Toast.makeText(RegisterActivity.this, "it's ok", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(RegisterActivity.this, "registration was successful", Toast.LENGTH_SHORT).show();
                                             }else{
                                                 Toast.makeText(RegisterActivity.this,task2.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                             }

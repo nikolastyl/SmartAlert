@@ -30,7 +30,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     }
 
-    public void submit(View v){
+    public void submit(View v){ //forget password action
         mAuth.sendPasswordResetEmail(email.getText().toString())
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
